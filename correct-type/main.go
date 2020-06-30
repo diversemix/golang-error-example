@@ -1,5 +1,6 @@
 package main
 
+import "C"
 import (
 	"errors"
 	"fmt"
@@ -22,6 +23,19 @@ func validCSVContent(content string) bool {
 	return len(commaCount) == 1
 }
 
+type invalidCSVContentError struct {
+	error
+}
+
+func newInvalidCSVContentError(text string) invalidCSVContentError {
+	return invalidCSVContentError{errors.New(text)}
+}
+
+func IsInvalidCSVContent(err error) bool {
+	_, result := err.(invalidCSVContentError)
+	return result
+}
+
 func ReadCSV(filename string) (string, error) {
 	file, err := os.Open(filename)
 	if err != nil {
@@ -35,7 +49,7 @@ func ReadCSV(filename string) (string, error) {
 
 	content := string(b)
 	if !validCSVContent(content) {
-		return "", errors.New("Invalid CSV content")
+		return "", newInvalidCSVContentError("Invalid CSV content")
 	}
 	return content, nil
 }
