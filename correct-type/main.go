@@ -9,6 +9,10 @@ import (
 	"strings"
 )
 
+func test(a []string) bool {
+	return true
+}
+
 func validCSVContent(content string) bool {
 	lines := strings.Split(content, "\n")
 	// Map of "number of commas on line" -> "number of lines with that amount of commas on"
@@ -55,5 +59,6 @@ func ReadCSV(filename string) (string, error) {
 }
 
 func main() {
+	test(nil)
 	fmt.Println(ReadCSV("main.go"))
 }
